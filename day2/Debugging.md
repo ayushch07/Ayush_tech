@@ -1,141 +1,80 @@
-# Advanced Debugging: Notes and Assignment
-
-## 3.1. Introduction to Debugging
-
-### 3.1.1. Learning Goals
-
-By the end of this module, students should be able to:
-
-- Understand the significance of debugging in the software development lifecycle.
-- Identify common types of programming errors.
-- Apply various debugging techniques to isolate and fix bugs.
-- Utilize debugging tools effectively.
-
-### 3.1.2. Objectives
-
-- Grasp the real-world importance of debugging.
-- Learn strategies to prevent bugs.
-- Master the use of debugging tools and techniques.
-- Practice advanced problem-solving skills.
-
----
-
-## 3.2. Programming in the Real World
-
-In real-world programming, code rarely works perfectly on the first try. Debugging is a critical skill that involves identifying and fixing errors in code. Professional developers spend a significant portion of their time debugging and ensuring code reliability. Understanding the art of debugging can make the difference between a novice and a proficient developer.
-
-### Common types of errors:
-
-- **Syntax Errors:** Mistakes in the code structure (e.g., missing colons, unmatched parentheses).
-- **Runtime Errors:** Errors that occur while the program is running (e.g., division by zero).
-- **Logic Errors:** The program runs without crashing but produces incorrect results.
-
-### Debugging often involves:
-
-1. Reproducing the error.
-2. Isolating the problematic code.
-3. Fixing the bug.
-4. Testing thoroughly to ensure the fix is correct and doesn’t introduce new issues.
-
-#### Additional Reading:
-
-- [Python Official Debugging Guide](https://docs.python.org/3/library/pdb.html)
-- [Real Python Debugging Tutorial](https://realpython.com/python-debugging-pdb/)
-- [Effective Debugging Techniques](https://hackernoon.com/10-ways-to-debug-your-code-faster-33d91b55592c)
-
----
-
-## 3.3. Debugging
-
-### 3.3.1. How to Avoid Debugging
-
-While debugging is inevitable, writing clean and predictable code reduces the chances of bugs. Here are strategies to minimize bugs:
-
-- **Write Clear Code:** Use meaningful variable names and write self-explanatory functions.
-- **Test Incrementally:** Test your code step-by-step rather than writing everything at once.
-- **Use Assertions:** Assertions help catch unexpected states early.
-- **Version Control:** Commit working code often, so you can easily revert to a stable state.
-- **Peer Reviews:** Having another person review your code can uncover issues you might have missed.
-
-### Tools and Techniques:
-
-- **Print Statements:** Insert print statements to trace variable values.
-- **Debuggers:** Use tools like Python's built-in `pdb` or IDE-integrated debuggers.
-- **Logging:** Implement logging to track the flow of execution and catch unexpected behaviors.
-- **Rubber Duck Debugging:** Explain your code to someone (or an inanimate object) to uncover mistakes.
-
-### Pro Tips:
-
-- Break down problems into smaller chunks.
-- Focus on one bug at a time.
-- Write test cases for critical parts of your code.
-- Avoid making multiple changes at once while debugging.
-
----
-
-### Understanding Try-Except (Try-Catch)
-
-The `try` and `except` blocks in Python help handle exceptions gracefully, ensuring the program doesn’t crash unexpectedly.
-
-```python
-try:
-    result = 10 / 0
-except ZeroDivisionError:
-    print("Cannot divide by zero!")
-```
-
-#### Steps to Use Try-Except:
-
-1. Identify the code that might raise an exception.
-2. Wrap the risky code inside a `try` block.
-3. Use `except` to handle specific exceptions.
-4. Optionally add `else` for code that runs if no exceptions occur and `finally` for cleanup actions.
-
-#### Learn More:
-
-- [Python Exceptions Documentation](https://docs.python.org/3/tutorial/errors.html)
-- [Real Python Try-Except Guide](https://realpython.com/python-exceptions/)
-
----
-
 ## Advanced Debugging Assignment
 
 ### 1. Error Classification
 
 Identify the type of error in the following code snippets and fix them:
 
-```python
-# a) Syntax Error
+python
 for i in range(5)
     print(i)
 
-# b) Runtime Error
 x = 10 / 0
 
-# c) Logic Error
 def calculate_area(radius):
-    return 2 * 3.14 * radius  # Incorrect formula for area
-```
+    return 2 * 3.14 * radius
+
+
+Answer - When a number is divided by zero in Python, it raises a ZeroDivisionError. We can handle this error in this way- 
+
+python
+def safe_division(a, b):
+    if b == 0:
+        return "Error: Division by zero is not allowed"
+    return a / b
+
+print(safe_division(10, 2))  # Output: 5.0
+print(safe_division(10, 0))  # Output: Error: Division by zero is not allowed
+
 
 ### 2. Debugging Complex Functions
 
 Debug the following function and correct the mistakes:
 
-```python
+python
 def process_data(data):
     total = 0
     for item in data:
-        total += int(item)  # This may throw an error if item is not convertible to int
-    return total / len(data)  # Handle division by zero error
+        total += int(item)
+    return total / len(data)
 
 print(process_data(['10', '20', 'abc', '30']))
-```
+
+Answer-  Errors in the Code:
+ValueError:
+
+The list contains 'abc', which cannot be converted to an integer.
+Attempting int('abc') will raise a ValueError.
+ZeroDivisionError (Potentially):
+
+If data is an empty list ([]), dividing by len(data) will result in a ZeroDivisionError.
+python
+def process_data(data):
+    total = 0
+    count = 0  # To track valid numeric entries
+    
+    for item in data:
+        try:
+            total += int(item)
+            count += 1  # Increment count only for valid numbers
+        except ValueError:
+            print(f"Warning: '{item}' is not a valid number and will be skipped.")
+    
+    if count == 0:
+        return "Error: No valid numbers to process"
+    
+    return total / count  # Avoid division by zero
+
+# Test cases
+print(process_data(['10', '20', 'abc', '30']))  # Expected Output: 20.0
+print(process_data([]))  # Expected Output: Error message
+
+
 
 ### 3. Advanced Debugging Challenge
 
 You’re given a function that fails intermittently. Investigate the bug and fix it:
 
-```python
+python
 import random
 
 def unreliable_function():
@@ -144,36 +83,82 @@ def unreliable_function():
 
 for i in range(10):
     print(unreliable_function())
-```
+
+Answer- If the number is divided by 0 (that is given in choice array) then it will raise error of ZeroDivisionError. So we handle this using the if condition. 
+
+python
+import random
+
+def unreliable_function():
+    number = random.choice([0, 1, 2])  # Step 1: Select a random number from [0, 1, 2]
+    
+    if number == 0:  # Step 2: Check if the number is 0
+        return "Warning: Division by zero avoided"  # Step 3: Return warning if number is 0
+    
+    return 10 / number  # Step 4: Perform division if number is not 0
+
+for i in range(10):  # Step 5: Repeat 10 times
+    print(unreliable_function())  # Step 6: Call the function and print the result
+
 
 ### 4. Writing Debug-Friendly Code
 
 Refactor the following function to improve readability and add error handling:
 
-```python
+python
 def calculate_discount(price, discount):
     return price - (price * discount / 100)
 
 print(calculate_discount(100, '10%'))
-```
+
+Answer
+python
+def calculate_discount(price, discount):
+    try:
+        discount = float(str(discount).replace('%', ''))
+        if discount < 0 or discount > 100:
+            return "Error: Discount must be between 0 and 100."
+        return price - (price * discount / 100)
+    except ValueError:
+        return "Error: Invalid discount format."
+print(calculate_discount(100, 10))      # Output: 90.0
+print(calculate_discount(100, '10%'))   # Output: 90.0
+print(calculate_discount(100, '10'))    # Output: 90.0
+print(calculate_discount(100, 'abc'))   # Output: Error 
+print(calculate_discount(100, 150))     # Output: Error
+
 
 ### 5. Rubber Duck Debugging
 
 Explain the following code snippet step-by-step as if you’re teaching someone unfamiliar with coding:
 
-```python
+python
 numbers = [1, 2, 3, 4, 5]
 result = 1
 for num in numbers:
     result *= num
 print("Product:", result)
-```
+
+Answer:
+python
+Step1: - We create a list called numbers that contains [1, 2, 3, 4, 5].
+- We initialize a variable result with 1 because multiplying by 1 does not change the value.
+Step2: - The for loop iterates through each element in numbers:
+1️⃣ First loop: result = 1 * 1 → result = 1
+2️⃣ Second loop: result = 1 * 2 → result = 2
+3️⃣ Third loop: result = 2 * 3 → result = 6
+4️⃣ Fourth loop: result = 6 * 4 → result = 24
+5️⃣ Fifth loop: result = 24 * 5 → result = 120
+Step3: -The loop has finished, and result now holds 120.
+The program prints:
+Product: 120
+
 
 ### 6. Advanced Challenge: Debug a Multi-threaded Program
 
 Fix the race condition in the following code:
 
-```python
+python
 import threading
 
 counter = 0
@@ -189,17 +174,44 @@ for t in threads:
     t.join()
 
 print("Counter:", counter)  # Expected: 200000
-```
+
+Answer: Fixing the Race Condition Using a Lock 🔒 
+The issue in my code is that multiple threads are modifying the shared variable counter at the same time, leading to data corruption.
+✅ Solution: 
+Use a threading.Lock
+A lock ensures that only one thread at a time modifies counter, preventing lost updates.
+python
+import threading
+
+counter = 0
+lock = threading.Lock()  # Create a Lock
+
+def increment():
+    global counter
+    for _ in range(100000):
+        with lock:  # Lock before modifying counter
+            counter += 1
+
+# Create and start threads
+threads = [threading.Thread(target=increment) for _ in range(2)]
+for t in threads:
+    t.start()
+for t in threads:
+    t.join()
+
+print("Counter:", counter)  # Correct output: 200000
+
+
 
 ### 7. Activity: Debug with Breakpoints
 
 Learn to use breakpoints in your IDE (e.g., VSCode, PyCharm) to inspect variable states step-by-step.
 
-**Steps:**
+*Steps:*
 
 1. Open your IDE and load the following code:
 
-```python
+python
 def divide(a, b):
     result = a / b
     return result
@@ -207,13 +219,26 @@ def divide(a, b):
 a = 10
 b = 0
 print(divide(a, b))
-```
 
-2. Set a breakpoint at the line where `result` is calculated.
+
+2. Set a breakpoint at the line where result is calculated.
 3. Run the code in debug mode.
-4. Inspect the values of `a` and `b` before the division.
+4. Inspect the values of a and b before the division.
 5. Step through the code to observe the flow of execution.
 6. Fix the division by zero error and re-run the code.
+
+Answer 
+python
+def divide(a, b):
+    if b == 0:
+        return "Error: Cannot divide by zero"
+    result = a / b
+    return result
+
+a = 10
+b = 0
+print(divide(a, b))  # Output: Error: Cannot divide by zero
+
 
 #### Learn More:
 
@@ -224,7 +249,7 @@ print(divide(a, b))
 
 Optimize the following code and fix potential memory leaks:
 
-```python
+python
 import time
 
 def inefficient_function():
@@ -235,7 +260,68 @@ def inefficient_function():
     return result
 
 print(len(inefficient_function()))
-```
+
+Answer
+✅ Optimized Solution (Using Generator)
+Instead of storing all values in a list, we can use a generator, which produces values one at a time, reducing memory usage.
+python
+import time
+
+def efficient_function():
+    for i in range(100000):
+        yield i * 2  # Generates values one at a time
+
+# Convert to list only when needed (for testing purposes)
+data = list(efficient_function())  
+print(len(data))  # Output: 100000
+
+# Alternative: Using a loop instead of storing everything
+# for num in efficient_function():
+#     process(num)  # Perform operations without storing all values
+
+
+
+### 9. Unexpected None
+
+Debug why the function returns None:
+
+python
+def add(a, b):
+    result = a + b
+print(add(3, 4))
+
+Answer : 
+The function calculates the sum (result = a + b) but does not return the value.
+Since there is no return statement, Python implicitly returns None.
+python
+def add(a, b):
+    result = a + b
+    return result 
+
+print(add(3, 4))  # Output: 7
+
+
+
+
+### 10. Silent Failures
+
+Identify why the code doesn't raise an error:
+
+python
+try:
+    result = 10 / 0
+except:
+    pass
+print("No error detected!")
+
+Answer
+python
+try:
+    result = 10 / 0  # This causes ZeroDivisionError
+except:  # This catches ALL exceptions but ignores them
+    pass  # Silently ignores the error
+
+print("No error detected!")  # Executes even though an error occurred
 
 ---
 
