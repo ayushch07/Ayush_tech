@@ -299,7 +299,7 @@ print(is_even(2));
 python
 def full_name(first,last):
     return first +" "+ last;
-print(full_name("Astha","Singh"));
+print(full_name("ayush","Singh"));
 
 5. **Create a function circle_area(radius) that returns the area of a circle using πr². Use pi = 3.14.**
 python
@@ -324,7 +324,7 @@ print(sum_even([1,2,3,4]));
 python
 def reverse_string(s:str)->str:
     return s[::-1]
-print(reverse_string("astha"))
+print(reverse_string("ayush"))
 
 3. **Create a function fibonacci(n: int) -> list[int] that returns the first n Fibonacci numbers.**
 python
@@ -385,7 +385,7 @@ def analyze_text(text: str):
     for word, count in freq.items():
         print(f"{word}: {count}")
 
-analyze_text("astha loves coding and astha enjoys learning coding")
+analyze_text("ayush loves coding and ayush enjoys learning coding")
 
 
 
